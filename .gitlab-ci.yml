@@ -1,0 +1,18 @@
+stages:
+    - release
+
+
+release:
+    stage: release
+    image: "alpine"
+    script:
+        - export FILENAME=${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+        - apk add --update gzip tar
+        - mkdir -p /tmp/${FILENAME}/
+        - cp -R * /tmp/${FILENAME}/
+        - cd /tmp/
+        - tar czvf ${FILENAME}.tar.gz ${FILENAME}
+        - mv ${FILENAME}.tar.gz ${CI_PROJECT_DIR}
+    artifacts:
+        paths:
+            - ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}.tar.gz

@@ -1,0 +1,17 @@
+stages:
+    - build
+    - release
+
+
+build-linux:
+    stage: build
+    image: "alpine"
+    script:
+        - apk add --update tar gzip
+        - mkdir -p /tmp/${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}/
+        - cp -R * /tmp/${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}/
+        - tar --directory /tmp/ -czvf  ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}.tar.gz  .
+    artifacts:
+        file:
+            - ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}.tar.gz
+
